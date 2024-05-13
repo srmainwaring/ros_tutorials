@@ -2,8 +2,8 @@
 Changelog for package turtlesim
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.8.3 (2024-05-13)
+------------------
 * Add icon for Jazzy. (`#167 <https://github.com/ros/ros_tutorials/issues/167>`_) (`#168 <https://github.com/ros/ros_tutorials/issues/168>`_)
   (cherry picked from commit 014955e15a6ac3b1649cbf21e11c8547ebd47af7)
   Co-authored-by: Marco A. Gutierrez <marcogg@marcogg.com>
