@@ -13,16 +13,27 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(rcl_interfaces REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(turtlesim_msgs REQUIRED)
 
-include_directories(include ${Qt5Widgets_INCLUDE_DIRS})
+include_directories(include ${Qt6Widgets_INCLUDE_DIRS})
 
-qt5_wrap_cpp(turtlesim_node_MOCS include/turtlesim/turtle_frame.hpp)
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "action/RotateAbsolute.action"
+  "msg/Color.msg"
+  "msg/Pose.msg"
+  "srv/Kill.srv"
+  "srv/SetPen.srv"
+  "srv/Spawn.srv"
+  "srv/TeleportAbsolute.srv"
+  "srv/TeleportRelative.srv")
+
+qt6_wrap_cpp(turtlesim_node_MOCS include/turtlesim/turtle_frame.hpp)
 
 add_executable(turtlesim_node
   src/turtlesim.cpp
@@ -34,8 +45,8 @@ target_link_libraries(turtlesim_node PRIVATE
   ament_index_cpp::ament_index_cpp
   ${cpp_typesupport_target}
   ${geometry_msgs_TARGETS}
-  ${turtlesim_msgs_TARGETS}
-  Qt5::Widgets
+  Qt6::Widgets
+  ${rcl_interfaces_TARGETS}
   rclcpp::rclcpp
   rclcpp_action::rclcpp_action
   ${std_srvs_TARGETS}
