@@ -13,12 +13,13 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(rcl_interfaces REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(turtlesim_msgs REQUIRED)
+find_package(builtin_interfaces REQUIRED)
+
 
 if(MSVC)
   set(QT_VERSION_MAJOR 5)
@@ -30,15 +31,9 @@ endif()
 
 include_directories(include ${Qt${QT_VERSION_MAJOR}Widgets_INCLUDE_DIRS})
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "action/RotateAbsolute.action"
-  "msg/Color.msg"
-  "msg/Pose.msg"
-  "srv/Kill.srv"
-  "srv/SetPen.srv"
-  "srv/Spawn.srv"
-  "srv/TeleportAbsolute.srv"
-  "srv/TeleportRelative.srv")
+include_directories(${turtlesim_msgs_INCLUDE_DIRS})
+link_directories(${turtlesim_msgs_LIBRARY_DIRS})
+link_libraries(${turtlesim_msgs_LIBRARIES})
 
 qt_wrap_cpp(turtlesim_node_MOCS include/turtlesim/turtle_frame.hpp)
 
@@ -50,10 +45,8 @@ add_executable(turtlesim_node
 )
 target_link_libraries(turtlesim_node PRIVATE
   ament_index_cpp::ament_index_cpp
-  ${cpp_typesupport_target}
   ${geometry_msgs_TARGETS}
   Qt${QT_VERSION_MAJOR}::Widgets
-  ${rcl_interfaces_TARGETS}
   rclcpp::rclcpp
   rclcpp_action::rclcpp_action
   ${std_srvs_TARGETS}
@@ -61,6 +54,7 @@ target_link_libraries(turtlesim_node PRIVATE
 
 add_executable(turtle_teleop_key tutorials/teleop_turtle_key.cpp)
 target_link_libraries(turtle_teleop_key PRIVATE
+  ${builtin_interfaces_TARGETS}
   ${turtlesim_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   rclcpp::rclcpp
@@ -69,6 +63,7 @@ target_link_libraries(turtle_teleop_key PRIVATE
 
 add_executable(draw_square tutorials/draw_square.cpp)
 target_link_libraries(draw_square PRIVATE
+  ${builtin_interfaces_TARGETS}
   ${turtlesim_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   rclcpp::rclcpp
@@ -77,6 +72,7 @@ target_link_libraries(draw_square PRIVATE
 
 add_executable(mimic tutorials/mimic.cpp)
 target_link_libraries(mimic PRIVATE
+  ${builtin_interfaces_TARGETS}
   ${turtlesim_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   rclcpp::rclcpp
